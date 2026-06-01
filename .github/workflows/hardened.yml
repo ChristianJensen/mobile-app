@@ -1,0 +1,8 @@
+name: mobile-react-app::hardened
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+jobs:
+  dependency-audit: { runs-on: ubuntu-latest, steps: [{ uses: actions/checkout@v4 }, { run: echo "audit…" }] }
+  secrets-scan:     { runs-on: ubuntu-latest, steps: [{ uses: actions/checkout@v4 }, { run: echo "secrets…" }] }
+  sast:             { runs-on: ubuntu-latest, steps: [{ uses: actions/checkout@v4 }, { run: echo "sast…" }] }

@@ -1,0 +1,17 @@
+name: mobile-react-app::integrated        # ← explicit pipeline::stage identity
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+jobs:
+  build:                            # parallel jobs in ONE stage — the whole point of multi-file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "build…"
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "tests…"
+      - name: Hold the file open so workflow_run stays in_progress (Live view)
+        run: sleep 120

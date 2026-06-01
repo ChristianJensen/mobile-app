@@ -1,10 +1,12 @@
 name: mobile-react-app::verified
 on:
-  push: { branches: [main] }
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["mobile-react-app::hardened"]
+    types: [completed]
 jobs:
-  deploy:
+  verify:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
       - run: echo "deploy…"

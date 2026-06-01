@@ -1,0 +1,37 @@
+name: mobile-app                  # ← becomes the service identity (rolls up under Hardware Shop)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  integrated:
+    name: 'Integrated — Build & Test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "build + unit tests…"
+      - name: Hold the stage in-progress so it's visible on the Live view
+        run: |
+          echo "sleeping 120s — watch Hangar → Pipelines → Live"
+          sleep 120
+      - run: echo "done"
+
+  hardened:
+    name: 'Hardened — Security'
+    runs-on: ubuntu-latest
+    needs: integrated
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "security scan…"
+
+  verified:
+    name: 'Verified — Deploy'
+    runs-on: ubuntu-latest
+    needs: [integrated, hardened]
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "deploy…"
